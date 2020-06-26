@@ -52,9 +52,9 @@ This intent allows the user to trim the universe of US-listed stocks based on fu
     1. NM
     2. Low (> 0 and < 10 )
     3. Below Average ( > 10 and < 13.5)
-    3. Average (> 13.5 and < 16.5)
-    4. Above Average (> 16.5 and < 20)
-    5. High (> 20)
+    4. Average (> 13.5 and < 16.5)
+    5. Above Average (> 16.5 and < 20)
+    6. High (> 20)
     
 #### Slot_3:  Bollinger Band Positioning (2 std deviations +/- 20-day SMA)
 * Card Buttons
@@ -65,22 +65,23 @@ This intent allows the user to trim the universe of US-listed stocks based on fu
 #### Slot_4: Exponential Moving Average Positioning  
 * Card Buttons
     1. Bullish - Golden Cross Zone (50 EMA has broken above 200 EMA)
-    2. Bearish - Death Cross Zone (50 EMA has broken above 200 EMA)
+    2. Bearish - Death Cross Zone (50 EMA has broken below 200 EMA)
     
 stockSelect will output a ranked list of potential stocks
 
-### Intent_3 :  'weightPortfolio'
-This intent allows AlphaBot to compute optimal weighting based on the number of desired stocks
+### Intent_3 :  'holdingRange'
 
-#### Slot_1: Portfolio Size
+#### Slot_1: Expected Timeframe
 * Card Buttons
-    1. 4
-    2. 5
-    3. 6
-    4. 7
-    5. 8
- 
-weightPortfolio will output the recommended portfolio and apply weightings.
-    
-*Machine Learning modeling portion on how to retrain model TBA*
+    1. 1 Week
+    2. 1 Month
+    3. 3 Months (1 quarter)
+    4. 6 Months
+    5. 1 Year
+    6. 2 Years
 
+holdingRange will be incorporated in ML model to rank potential portfolio stocks
+
+?Vader sentiment analysis for 'goodness' (longs) and 'badness' (shorts)
+
+*Machine Learning modeling portion on how to retrain model TBA*
