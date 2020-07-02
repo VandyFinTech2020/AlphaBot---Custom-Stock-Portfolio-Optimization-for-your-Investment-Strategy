@@ -35,7 +35,7 @@ This intent allows the user to trim the universe of US-listed stocks based on fu
     1. > 5.00 per share
     2. > 1.00 per share
     3. None
-    
+
 filterStocks will output a curated list of acceptable listed stocks based on user inputs.
 
 ### Intent_2 :  'stockSelect'
@@ -55,6 +55,12 @@ This intent allows the user to trim the universe of US-listed stocks based on fu
     4. Average (> 13.5 and < 16.5)
     5. Above Average (> 16.5 and < 20)
     6. High (> 20)
+    
+#### Slot_3: Price / Book
+* Card Buttons
+    1. Low (< 1)
+    2. Fair (> 1 and < 2)
+    3. High (> 2)
     
 #### Slot_3:  Bollinger Band Positioning (2 std deviations +/- 20-day SMA)
 * Card Buttons
