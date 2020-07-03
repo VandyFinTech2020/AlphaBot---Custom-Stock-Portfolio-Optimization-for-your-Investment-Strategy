@@ -86,8 +86,6 @@ stockSelect will output a ranked list of potential stocks
     5. 1 Year
     6. 2 Years
 
-holdingRange will be incorporated in ML model to rank potential portfolio stocks
-
-?Vader sentiment analysis for 'goodness' (longs) and 'badness' (shorts)
-
-*Machine Learning modeling portion on how to retrain model TBA*
+### Determining Expected Return - LSTM Model
+* Output will produce Ranked list of stocks based on filters selected including portfolio size and holding period.
+* User will be responsible for weighting stocks
