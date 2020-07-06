@@ -6,8 +6,6 @@ from pathlib import Path
 from datetime import date, datetime, timedelta
 import os
 import alpaca_trade_api as tradeapi
-# import matplotlib.pyplot as plt
-# import hvplot.pandas
 
 from tensorflow.keras.models import Sequential, load_model
 from tensorflow.keras.layers import Dense, LSTM, Dropout
@@ -53,7 +51,7 @@ def create_model_and_dataset(ticker, fit_window=2):
     and we're pulling the data here, we just return the stock
     data along with the model.
     
-    `ticker` is stock ticker, such as 'GOOGL' or 'AMZN'.
+    `ticker` is stock ticker string, such as 'GOOGL' or 'AMZN'.
     '''    
     # Set timeframe to '1D'
     timeframe = '1D'
@@ -79,27 +77,23 @@ def create_model_and_dataset(ticker, fit_window=2):
     
     
     # Create feature & target
-    # fit_window is how many priors we use
+    # `fit_window` is how many priors we use
     # in each training instance.
     X, y = window_data(stock_df, fit_window, 0, 0)
 
     # Train/test split
     train_size = 0.80
     split = int(len(X) * train_size)
-
     X_train = X[:split]
     X_test = X[split:]
-
     y_train = y[:split]
     y_test = y[split:]
     
     # Scale data
     scaler = MinMaxScaler()
-
     scaler.fit(X)
     X_train = scaler.transform(X_train)
     X_test = scaler.transform(X_test)
-
     scaler.fit(y)
     y_train = scaler.transform(y_train)
     y_test = scaler.transform(y_test)
@@ -112,7 +106,7 @@ def create_model_and_dataset(ticker, fit_window=2):
     # Instantiate model
     model = Sequential()
 
-    # Fitting parameters
+    # Model parameters
     num_inputs = fit_window
     dropout_fraction = 0.2
 
@@ -160,6 +154,12 @@ def export_model(ticker, model, current_date=datetime.today()):
     Model should be exported iff it is up-to-date, i.e.
     has been fitted to the most recent data. Therefore we
     pass the date in to know whether a saved model is current.
+    
+    Note: currently not implemented to do anything useful for
+    our purposes.
+    
+    #TODO Figure out how to save the date for a model so that
+    we know what data to train it on when we update it.
     '''
     model_json = model.to_json()
     model_path = Path(f"./Models/{ticker}_model.json")
@@ -168,20 +168,41 @@ def export_model(ticker, model, current_date=datetime.today()):
 
 
 def get_model(ticker):
-    # Path should take a regular expression to id the model,
-    # because the file name will have a date (see `export_model`)
-    # and we'll need to parse it to know whether we need
-    # to update the model.
+    '''
+    Basically just a wrapper around `load_model`. Until we
+    figure out how to export a model with a date, this
+    isn't useful for much.
+
+    `Path` could take a regular expression to id the model,
+    if the filename contained a date (see `export_model`)
+    and we could parse it to know whether we need
+    to update the model.
+    '''
     model_path = Path(f"./Models/{ticker}_model.json")
     model = load_model(model_path)
     return model
 
 
 
+def update_model(model):
+    '''
+    Fits model with most current data.
+    
+    Only need if we're saving the models and updating periodically,
+    but as of 7/6/20 Peter couldn't find a way to save models
+    with the metadata needed.
+    '''
+    # TODO
+    pass
+
+
+
 def prep_data_for_fitting(df, fit_window=2):
     '''
     Create data using `window_data`.
+    
     Scale data.
+    
     Return X, y for fitting model.
     '''
     X, y = window_data(df, fit_window, 0, 0)
@@ -190,6 +211,7 @@ def prep_data_for_fitting(df, fit_window=2):
     scaler.fit(X)
     X = scaler.transform(X)
     
+    # Reshape for model
     X = X.reshape((X.shape[0], X.shape[1], 1))
     
     scaler.fit(y)
@@ -220,18 +242,9 @@ def prep_data_for_pred(data, stock_data, fit_window=2):
 
 
 
-def update_model(model):
-    '''
-    Fits model with most current data.
-    '''
-    # TODO
-    pass
-
-
-
 def rescale_pred(pred, stock_data):
     '''
-    Inversely scale data.
+    Inversely scale data (viz. predicted prices).
     '''
     scaler = MinMaxScaler()
     scaler.fit(stock_data)
@@ -249,9 +262,9 @@ def predicted_portfolio_metrics(model, all_data, window=30, fit_window=2):
     '''
     
     # DF where we'll append predictions as we generate them. Copying 
-    # most recent `training_window` days from all_data so that we 
+    # most recent `fit_window` days from all_data so that we 
     # have a basis for predictions.
-    df = all_data.iloc[-fit_window:].copy()
+    df = all_data.iloc[-fit_window:]
 
     for _ in range(window):        
         # Scale data and reshape for model
@@ -277,21 +290,22 @@ def predicted_portfolio_metrics(model, all_data, window=30, fit_window=2):
         X, y = prep_data_for_fitting(df, fit_window)
         model.fit(X, y, epochs=10, shuffle=False, batch_size=1, verbose=0)
         
-    # After for loop, last row in df should be the prediction 
-    # that we want.
+    # After for loop, last row in df will be the prediction we want.
     pred_to_return = df.iloc[-1]
     
-    # TODO
     # Calculate pred_return, sharpe ratio, date of prediction (just to 
     # be transparent for user)
     df['return'] = df['close'].pct_change()
+    # Calc redicted return
     pred_return = df.iloc[-1]['return'] * 100
     
+    # Calc sharpe ratio
     sharpe_ratio = (df['return'].mean() * 252) / (df['return'].std() * np.sqrt(252))
     
-    prediction_date = df.iloc[-1].name
+    # Get predicted date
+    predicted_date = df.iloc[-1].name
     
-    return pred_return, sharpe_ratio, prediction_date
+    return pred_return, sharpe_ratio, predicted_date
 
 
 
@@ -303,8 +317,8 @@ def get_portfolio_predictions(tickers):
     predicted_values = dict.fromkeys(tickers)
     
     for ticker in tickers:
-        # Get model if exists, otherwise create one
-        
+        # If we had saved models, we could check for those here
+        # and update them if they exist.
         model, data = create_model_and_dataset(ticker)
         
         pred_return, sharpe_ratio, predicted_date = predicted_portfolio_metrics(model, data)
