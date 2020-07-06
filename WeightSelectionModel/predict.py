@@ -1,5 +1,7 @@
 import pandas as pd
 import numpy as np
+import joblib
+from datetime import datetime, timedelta
 from pathlib import Path
 from datetime import date, datetime, timedelta
 import os
@@ -315,8 +317,6 @@ def get_portfolio_predictions(tickers):
         predicted_values[ticker] = [pred_return, sharpe_ratio, prediction_date]
         
     return predicted_values
-
-
 
 
 
