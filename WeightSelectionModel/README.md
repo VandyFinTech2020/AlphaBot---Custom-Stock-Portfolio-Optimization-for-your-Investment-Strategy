@@ -27,10 +27,10 @@ to get prediction results.
 
 ### Testing
 
-To show the running time at the command line, pass the `--test` flag, e.g.
+To show the running time at the command line, set `--test` to `True`, e.g.
 
 ```
-#prompt> python predict.py --portfolio 'AAPL, NFLX, GOOGL, TSLA --test
+#prompt> python predict.py --portfolio 'AAPL, NFLX, GOOGL, TSLA --test=True
 ```
 
 (I considered doing more with this but couldn't think of what else might be needed.)
