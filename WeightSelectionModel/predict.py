@@ -345,7 +345,7 @@ if __name__ == '__main__':
     # Parse command line arguments
     import argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument('--test', dest='test', help='Test')
+    parser.add_argument('--test', default=False, help='Test')
     parser.add_argument('--portfolio', dest='portfolio', help='Tickers (comma separated)')
     args = parser.parse_args()
 
