@@ -307,12 +307,12 @@ def get_portfolio_predictions(tickers):
         
         model, data = create_model_and_dataset(ticker)
         
-        pred_return, sharpe_ratio, prediction_date = predicted_portfolio_metrics(model, data)
+        pred_return, sharpe_ratio, predicted_date = predicted_portfolio_metrics(model, data)
         
         val_dict = {
             'predicted_return': pred_return,
             'sharpe_ratio': sharpe_ratio,
-            'prediction_date': prediction_date
+            'predicted_date': predicted_date
         }
         
         predicted_values[ticker] = val_dict
@@ -321,17 +321,30 @@ def get_portfolio_predictions(tickers):
 
 
 
-#### TESTS
-
 if __name__ == '__main__':
-    # Time the calls
-    start1 = datetime.now()
+    '''
+    Use `argparse` to get CLI flags from user.
+    '''
+    # In case testing, create timestamp at runtime.
+    start = datetime.now()
     
-    portfolio1 = ['GOOGL', 'NFLX', 'AMZN']
-    print('portfolio 1:', get_portfolio_predictions(portfolio1))
-    
-    start2 = datetime.now()
-    portfolio2 = ['AAPL', 'TSLA']
-    print('portfolio 2:', get_portfolio_predictions(portfolio2))
+    # Parse command line arguments
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--test', dest='test', help='Test')
+    parser.add_argument('--portfolio', dest='portfolio', help='Tickers (comma separated)')
+    args = parser.parse_args()
 
-    print(f"times: \nportfolio 1 (3 stocks): {datetime.now()-start1}, portfolio 2 (2 stocks): {datetime.now()-start2}")
+    # Get tickers from parsed args
+    ticker_strs = args.portfolio
+    tickers = [tick.strip() for tick in ticker_strs.split(',')]
+
+    # Main/top entry to ML part of the module
+    user_portfolio_metrics = get_portfolio_predictions(tickers)
+    
+    # Log predicted data to console
+    print(user_portfolio_metrics)
+    
+    # If testing, print the time
+    if args.test:
+        print(f"Run time: {datetime.now()-start}")
