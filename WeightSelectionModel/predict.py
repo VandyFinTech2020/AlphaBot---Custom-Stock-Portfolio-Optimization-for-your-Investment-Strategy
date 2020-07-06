@@ -1,15 +1,13 @@
 import pandas as pd
 import numpy as np
-import joblib
+# import joblib # Currently using tf to export model
 from datetime import datetime, timedelta
 from pathlib import Path
 from datetime import date, datetime, timedelta
 import os
-from newsapi.newsapi_client import NewsApiClient
 import alpaca_trade_api as tradeapi
-import matplotlib.pyplot as plt
-import hvplot.pandas
-from joblib import dump, load
+# import matplotlib.pyplot as plt
+# import hvplot.pandas
 
 from tensorflow.keras.models import Sequential, load_model
 from tensorflow.keras.layers import Dense, LSTM, Dropout
@@ -21,9 +19,6 @@ def get_api():
     '''
     NOTE: Need to make sure this works with env variables on AWS.
     '''
-    # Set News API Key
-    newsapi = NewsApiClient(api_key=os.getenv("NEWS_API_KEY"))
-
     # Set Alpaca API key and secret
     alpaca_api_key = os.getenv("ALPACA_API_KEY_ID")
     alpaca_secret_key = os.getenv("ALPACA_SECRET_KEY")
@@ -208,7 +203,7 @@ def prep_data_for_pred(data, stock_data, fit_window=2):
     '''
     Prep data for prediction.
     
-    `stock_data` is need to fit the scaler to ALL of the data.
+    `stock_data` is needed to fit the scaler to ALL of the data.
     '''
     X = np.array(data)
     
@@ -332,11 +327,11 @@ if __name__ == '__main__':
     # Time the calls
     start1 = datetime.now()
     
-    portfolio1 = ['AMZN']
+    portfolio1 = ['GOOGL', 'NFLX', 'AMZN']
     print('portfolio 1:', get_portfolio_predictions(portfolio1))
     
     start2 = datetime.now()
-    portfolio2 = ['AAPL', 'GOOGL', 'NFLX', 'TSLA']
+    portfolio2 = ['AAPL', 'TSLA']
     print('portfolio 2:', get_portfolio_predictions(portfolio2))
 
-    print(f"times: \nport 1: {datetime.now()-start1}, port 2: {datetime.now()-start2}")
+    print(f"times: \nportfolio 1 (3 stocks): {datetime.now()-start1}, portfolio 2 (2 stocks): {datetime.now()-start2}")
