@@ -314,7 +314,13 @@ def get_portfolio_predictions(tickers):
         
         pred_return, sharpe_ratio, prediction_date = predicted_portfolio_metrics(model, data)
         
-        predicted_values[ticker] = [pred_return, sharpe_ratio, prediction_date]
+        val_dict = {
+            'predicted_return': pred_return,
+            'sharpe_ratio': sharpe_ratio,
+            'prediction_date': prediction_date
+        }
+        
+        predicted_values[ticker] = val_dict
         
     return predicted_values
 
@@ -323,5 +329,14 @@ def get_portfolio_predictions(tickers):
 #### TESTS
 
 if __name__ == '__main__':
-    portfolio = ['AMZN']
-    print(get_portfolio_predictions(portfolio))
+    # Time the calls
+    start1 = datetime.now()
+    
+    portfolio1 = ['AMZN']
+    print('portfolio 1:', get_portfolio_predictions(portfolio1))
+    
+    start2 = datetime.now()
+    portfolio2 = ['AAPL', 'GOOGL', 'NFLX', 'TSLA']
+    print('portfolio 2:', get_portfolio_predictions(portfolio2))
+
+    print(f"times: \nport 1: {datetime.now()-start1}, port 2: {datetime.now()-start2}")
