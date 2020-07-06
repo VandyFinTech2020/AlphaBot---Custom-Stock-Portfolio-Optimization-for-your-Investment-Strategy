@@ -1,6 +1,5 @@
 import pandas as pd
 import numpy as np
-# import joblib # Currently using tf to export model
 from datetime import datetime, timedelta
 from pathlib import Path
 from datetime import date, datetime, timedelta
@@ -160,6 +159,8 @@ def export_model(ticker, model, current_date=datetime.today()):
     
     #TODO Figure out how to save the date for a model so that
     we know what data to train it on when we update it.
+    #UPDATE Collin suggested saving a dataset csv along with the
+    model and getting the last date from that.
     '''
     model_json = model.to_json()
     model_path = Path(f"./Models/{ticker}_model.json")
@@ -253,7 +254,7 @@ def rescale_pred(pred, stock_data):
 
 
 
-def predicted_portfolio_metrics(model, all_data, window=30, fit_window=2):
+def predicted_portfolio_metrics(model, stock_data, window=30, fit_window=2):
     '''
     Uses `model` to predict returns `window` days in the future.
     
@@ -262,22 +263,22 @@ def predicted_portfolio_metrics(model, all_data, window=30, fit_window=2):
     '''
     
     # DF where we'll append predictions as we generate them. Copying 
-    # most recent `fit_window` days from all_data so that we 
+    # most recent `fit_window` days from stock_data so that we 
     # have a basis for predictions.
-    df = all_data.iloc[-fit_window:]
+    df = stock_data.iloc[-fit_window:]
 
     for _ in range(window):        
         # Scale data and reshape for model
         #
         # Still using fit_window here because we only want
         # most recent fit_window days for making prediction
-        data = prep_data_for_pred(df.iloc[-fit_window:], all_data, fit_window)
+        data = prep_data_for_pred(df.iloc[-fit_window:], stock_data, fit_window)
         
         # Get prediction
         pred = model.predict(data)
         
         # Inverse transform and reshape predicted price
-        pred = rescale_pred(pred, all_data)
+        pred = rescale_pred(pred, stock_data)
         pred = pred.reshape(-1,)
         
         # Get date for adding new row to index
@@ -296,6 +297,7 @@ def predicted_portfolio_metrics(model, all_data, window=30, fit_window=2):
     # Calculate pred_return, sharpe ratio, date of prediction (just to 
     # be transparent for user)
     df['return'] = df['close'].pct_change()
+
     # Calc redicted return
     pred_return = df.iloc[-1]['return'] * 100
     
@@ -309,7 +311,7 @@ def predicted_portfolio_metrics(model, all_data, window=30, fit_window=2):
 
 
 
-def get_portfolio_predictions(tickers):
+def get_portfolio_predictions(tickers, window=30):
     '''
     *** Entry point into module.
     '''
@@ -321,7 +323,7 @@ def get_portfolio_predictions(tickers):
         # and update them if they exist.
         model, data = create_model_and_dataset(ticker)
         
-        pred_return, sharpe_ratio, predicted_date = predicted_portfolio_metrics(model, data)
+        pred_return, sharpe_ratio, predicted_date = predicted_portfolio_metrics(model, data, window=window)
         
         val_dict = {
             'predicted_return': pred_return,
