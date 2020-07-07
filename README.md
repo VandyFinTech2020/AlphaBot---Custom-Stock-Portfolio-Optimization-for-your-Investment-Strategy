@@ -6,11 +6,11 @@ Harold has recently been promoted to portfolio manager for a state pension fund.
 
 He has tasked our team to develop a process that will allow him to input his selection criteria and compute an optimally-weighted portfolio that will produce the best possible returns for his retirees. The state has agreed to fund our work as long as other state portfolio managers will be able to use it to meet their own investment mandates.
 
-## AlphaBot Intents and Slots
+## AlphaBot Intent and Slots
 
-Our team has determined an AWS bot programmed with Amazon Lex and Lambda is best suited to devise a portfolio from his selection criteria. We have created three intents to process his inputs and produce an initial portfolio:
+Our team has determined an AWS bot programmed with Amazon Lex and Lambda is best suited to devise a portfolio from his selection criteria. We have created an intent to process user selection criteria and produce an initial portfolio:
 
-### Intent_1 :  'filterStocks'
+### Intent :  'MLIntent'
 This intent allows the user to trim the universe of US-listed stocks based on fund restrictions. 
 
 #### Slot_1:  Market Cap
@@ -24,30 +24,20 @@ This intent allows the user to trim the universe of US-listed stocks based on fu
 * Card Buttons
     1. No
     2. Yes
-
-#### Slot_3:  Dividend Payer
-* Card Buttons
-    1. No
-    2. Yes
     
-#### Slot_4:  Share Price Floor
+#### Slot_3:  Share Price Floor
 * Card Buttons
     1. > 5.00 per share
     2. > 1.00 per share
     3. None
 
-filterStocks will output a curated list of acceptable listed stocks based on user inputs.
-
-### Intent_2 :  'stockSelect'
-This intent allows the user to trim the universe of US-listed stocks based on fund restrictions. 
-
-#### Slot_1:  Price / Sales (TTM)
+#### Slot_4:  Price / Sales (TTM)
 * Card Buttons
     1. Low ( < 1 )
     2. Fair (> 1 and < 2 )
     3. High (> 2)
   
-#### Slot_2:  Price / Earnings (TTM)
+#### Slot_5:  Price / Earnings (TTM)
 * Card Buttons
     1. NM
     2. Low (> 0 and < 10 )
@@ -56,28 +46,24 @@ This intent allows the user to trim the universe of US-listed stocks based on fu
     5. Above Average (> 16.5 and < 20)
     6. High (> 20)
     
-#### Slot_3: Price / Book
+#### Slot_6: Price / Book
 * Card Buttons
     1. Low (< 1)
     2. Fair (> 1 and < 2)
     3. High (> 2)
     
-#### Slot_3:  Bollinger Band Positioning (2 std deviations +/- 20-day SMA)
+#### Slot_7:  Bollinger Band Positioning (2 std deviations +/- 20-day SMA)
 * Card Buttons
     1. Overbought (Trading Above Upper Band)
     2. Trading in Range
     3. Oversold (Trading Below Lower Band)
     
-#### Slot_4: Exponential Moving Average Positioning  
+#### Slot_8: Exponential Moving Average Positioning  
 * Card Buttons
     1. Bullish - Golden Cross Zone (50 EMA has broken above 200 EMA)
     2. Bearish - Death Cross Zone (50 EMA has broken below 200 EMA)
-    
-stockSelect will output a ranked list of potential stocks
 
-### Intent_3 :  'holdingRange'
-
-#### Slot_1: Expected Timeframe
+#### Slot_9: Expected Timeframe
 * Card Buttons
     1. 1 Week
     2. 1 Month
