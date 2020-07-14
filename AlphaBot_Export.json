@@ -1,0 +1,554 @@
+{
+  "metadata": {
+    "schemaVersion": "1.0",
+    "importType": "LEX",
+    "importFormat": "JSON"
+  },
+  "resource": {
+    "name": "AlphaBot",
+    "version": "1",
+    "intents": [
+      {
+        "rejectionStatement": {
+          "messages": [
+            {
+              "contentType": "PlainText",
+              "content": "Okay, I did a lot of hard work to get those results so please chose more carefully next time."
+            }
+          ]
+        },
+        "name": "MLIntent",
+        "version": "14",
+        "fulfillmentActivity": {
+          "codeHook": {
+            "uri": "arn:aws:lambda:us-east-1:466165357100:function:AlphaBot",
+            "messageVersion": "1.0"
+          },
+          "type": "CodeHook"
+        },
+        "sampleUtterances": [
+          "Let's build a portfolio from publicly traded stocks",
+          "Help me filter through NYSE and NASDAQ stocks",
+          "We'll help you pick the right investment choices today",
+          "Shall we begin",
+          "Let's get started",
+          "I would like to further define the parameters of my potential portfolio",
+          "I am tasked with building a unique portfolio",
+          "Would like some assistance building a portfolio",
+          "Can you help me filter down a portfolio",
+          "My job is to evaluate a potential portfolio based on fundamental characteristics"
+        ],
+        "slots": [
+          {
+            "sampleUtterances": [],
+            "slotType": "BollingerBands",
+            "slotTypeVersion": "1",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Required",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "Where would you like the stocks to be located based on bollinger bands? (Below, Between, Above)"
+                }
+              ],
+              "responseCard": "{\"version\":1,\"contentType\":\"application/vnd.amazonaws.card.generic\",\"genericAttachments\":[{\"imageUrl\":\"https://i0.wp.com/startuptipsdaily.com/wp-content/uploads/2016/04/how-to-invest-in-stocks.png?resize=768%2C500&ssl=1\",\"buttons\":[]}]}",
+              "maxAttempts": 2
+            },
+            "priority": 11,
+            "name": "bollingerBand"
+          },
+          {
+            "sampleUtterances": [],
+            "slotType": "AMAZON.PhoneNumber",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Required",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "What is your phone number?"
+                }
+              ],
+              "responseCard": "{\"version\":1,\"contentType\":\"application/vnd.amazonaws.card.generic\"}",
+              "maxAttempts": 2
+            },
+            "priority": 3,
+            "name": "contactInfo"
+          },
+          {
+            "sampleUtterances": [],
+            "slotType": "EMA",
+            "slotTypeVersion": "1",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Required",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "Would you like the stocks to be in golden cross territory or death cross territory?"
+                }
+              ],
+              "responseCard": "{\"version\":1,\"contentType\":\"application/vnd.amazonaws.card.generic\",\"genericAttachments\":[{\"imageUrl\":\"https://graphicriver.img.customer.envatousercontent.com/files/265137025/preview.jpg?auto=compress%2Cformat&q=80&fit=crop&crop=top&max-h=8000&max-w=590&s=2d1be57c0150947a4a715a67b8e4fa5e\",\"buttons\":[]}]}",
+              "maxAttempts": 2
+            },
+            "priority": 12,
+            "name": "eMA"
+          },
+          {
+            "sampleUtterances": [],
+            "slotType": "AMAZON.US_FIRST_NAME",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Required",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "What is your name?"
+                }
+              ],
+              "responseCard": "{\"version\":1,\"contentType\":\"application/vnd.amazonaws.card.generic\"}",
+              "maxAttempts": 2
+            },
+            "priority": 1,
+            "name": "firstName"
+          },
+          {
+            "sampleUtterances": [],
+            "slotType": "marketCap",
+            "slotTypeVersion": "1",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Required",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "What size range of market caps would you like?"
+                }
+              ],
+              "responseCard": "{\"version\":1,\"contentType\":\"application/vnd.amazonaws.card.generic\",\"genericAttachments\":[{\"imageUrl\":\"https://moneymorning.com/wp-content/blogs.dir/1/files/2017/04/4-5-17-best-small-cap-stocks-to-buy.png\",\"subTitle\":\"Choose the range of Market Cap for portfolio\",\"title\":\"Market Cap\",\"buttons\":[{\"text\":\"Small \",\"value\":\"Small Cap\"},{\"text\":\"Mid \",\"value\":\"Mid Cap\"},{\"text\":\"Large \",\"value\":\"Large Cap\"},{\"text\":\"Mega \",\"value\":\"Mega Cap\"}]}]}",
+              "maxAttempts": 2
+            },
+            "priority": 4,
+            "name": "marketCap"
+          },
+          {
+            "sampleUtterances": [],
+            "slotType": "priceBook",
+            "slotTypeVersion": "1",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Required",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "What price to book value are you looking for? (low, fair, high)"
+                }
+              ],
+              "responseCard": "{\"version\":1,\"contentType\":\"application/vnd.amazonaws.card.generic\",\"genericAttachments\":[{\"imageUrl\":\"https://images.financialexpress.com/2018/04/Stock.jpg\",\"subTitle\":\"Select a range\",\"title\":\"Price to Book\",\"buttons\":[{\"text\":\"Low\",\"value\":\"Low\"},{\"text\":\"Fair\",\"value\":\"Fair\"},{\"text\":\"High\",\"value\":\"High\"}]}]}",
+              "maxAttempts": 2
+            },
+            "priority": 10,
+            "name": "priceBook"
+          },
+          {
+            "sampleUtterances": [],
+            "slotType": "Price_per_Earnings",
+            "slotTypeVersion": "1",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Required",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "What price per earnings range are you looking for? (low, high)"
+                }
+              ],
+              "responseCard": "{\"version\":1,\"contentType\":\"application/vnd.amazonaws.card.generic\",\"genericAttachments\":[{\"imageUrl\":\"https://s3.amazonaws.com/zweb-s3.uploads/zoomer-radio/2016/06/rising-stocks-investment-market-25103986-600x450.jpg\",\"subTitle\":\"Select a range\",\"title\":\"Price to Earnings\",\"buttons\":[{\"text\":\"NM\",\"value\":\"Not Meaningful\"},{\"text\":\"Low\",\"value\":\"Low\"},{\"text\":\"Average\",\"value\":\"Average\"},{\"text\":\"High\",\"value\":\"High\"}]}]}",
+              "maxAttempts": 2
+            },
+            "priority": 8,
+            "name": "priceEarnings"
+          },
+          {
+            "sampleUtterances": [],
+            "slotType": "Price_Sale",
+            "slotTypeVersion": "1",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Required",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "What price to sale range are you looking for? (low = under one, fair = 1 and 2, high = 2 and above)"
+                }
+              ],
+              "responseCard": "{\"version\":1,\"contentType\":\"application/vnd.amazonaws.card.generic\",\"genericAttachments\":[{\"imageUrl\":\"https://images.wisegeek.com/stockmarketdisplay.jpg\",\"subTitle\":\"Select a range\",\"title\":\"Price to Sale\",\"buttons\":[{\"text\":\"Low\",\"value\":\"Low\"},{\"text\":\"Fair\",\"value\":\"Fair\"},{\"text\":\"High\",\"value\":\"High\"}]}]}",
+              "maxAttempts": 2
+            },
+            "priority": 9,
+            "name": "priceSale"
+          },
+          {
+            "sampleUtterances": [],
+            "slotType": "sharePrice",
+            "slotTypeVersion": "2",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Required",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "What would you like the lowest price per share to be? (high = over 5 bucks, low = under 5 bucks)"
+                }
+              ],
+              "responseCard": "{\"version\":1,\"contentType\":\"application/vnd.amazonaws.card.generic\",\"genericAttachments\":[{\"imageUrl\":\"https://i1.wp.com/www.dignited.com/wp-content/uploads/2019/07/dollar-544956_1920.jpg?resize=768%2C543&ssl=1\",\"subTitle\":\"Select a range\",\"title\":\"Share Price\",\"buttons\":[{\"text\":\"Under $5 \",\"value\":\"low\"},{\"text\":\"Above $5\",\"value\":\"high\"}]}]}",
+              "maxAttempts": 2
+            },
+            "priority": 7,
+            "name": "sharePrice"
+          },
+          {
+            "sampleUtterances": [],
+            "slotType": "AMAZON.NUMBER",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Required",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "The default time frame is 30 days, if you would like a different amount of time please input the amount of days you would like to hold this portfolio for"
+                }
+              ],
+              "maxAttempts": 2
+            },
+            "priority": 13,
+            "name": "timeFrame"
+          },
+          {
+            "sampleUtterances": [],
+            "slotType": "tradeVolume",
+            "slotTypeVersion": "1",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Required",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "Thinly traded stocks (ADTV < 100,000 shares) allowed?"
+                }
+              ],
+              "responseCard": "{\"version\":1,\"contentType\":\"application/vnd.amazonaws.card.generic\",\"genericAttachments\":[{\"imageUrl\":\"https://moneyandmarkets.com/wp-content/uploads/2018/10/Stock-Market-Update12.jpg\",\"buttons\":[]}]}",
+              "maxAttempts": 2
+            },
+            "priority": 5,
+            "name": "tradeVolume"
+          },
+          {
+            "sampleUtterances": [],
+            "slotType": "AMAZON.NUMBER",
+            "obfuscationSetting": "NONE",
+            "slotConstraint": "Required",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "How old are you?"
+                }
+              ],
+              "responseCard": "{\"version\":1,\"contentType\":\"application/vnd.amazonaws.card.generic\"}",
+              "maxAttempts": 2
+            },
+            "priority": 2,
+            "name": "userAge"
+          }
+        ],
+        "confirmationPrompt": {
+          "messages": [
+            {
+              "contentType": "PlainText",
+              "content": "Are you happy with your selection criteria?"
+            }
+          ],
+          "maxAttempts": 3
+        },
+        "dialogCodeHook": {
+          "uri": "arn:aws:lambda:us-east-1:466165357100:function:AlphaBot",
+          "messageVersion": "1.0"
+        }
+      }
+    ],
+    "slotTypes": [
+      {
+        "description": "Number of Shares Traded Per Day",
+        "name": "tradeVolume",
+        "version": "1",
+        "enumerationValues": [
+          {
+            "value": "No",
+            "synonyms": [
+              "Nope",
+              "No way",
+              "Nu-uh",
+              "No sir"
+            ]
+          },
+          {
+            "value": "Yes",
+            "synonyms": [
+              "Yee",
+              "Yessir",
+              "Definitely",
+              "Yeppurs"
+            ]
+          }
+        ],
+        "valueSelectionStrategy": "TOP_RESOLUTION"
+      },
+      {
+        "description": "Size of Company",
+        "name": "marketCap",
+        "version": "1",
+        "enumerationValues": [
+          {
+            "value": "Small Cap",
+            "synonyms": [
+              "small",
+              "baby-caps",
+              "micro-caps"
+            ]
+          },
+          {
+            "value": "Large Cap",
+            "synonyms": [
+              "Large",
+              "Big"
+            ]
+          },
+          {
+            "value": "Mid Cap",
+            "synonyms": [
+              "Medium",
+              "Mid",
+              "Mid-Range"
+            ]
+          },
+          {
+            "value": "Mega Cap",
+            "synonyms": [
+              "Huge",
+              "FANG",
+              "Mucho Grande"
+            ]
+          }
+        ],
+        "valueSelectionStrategy": "TOP_RESOLUTION"
+      },
+      {
+        "description": "Assets minus liabilities",
+        "name": "priceBook",
+        "version": "1",
+        "enumerationValues": [
+          {
+            "value": "High",
+            "synonyms": [
+              "2.5",
+              "over two",
+              "three",
+              "four",
+              "3",
+              "4"
+            ]
+          },
+          {
+            "value": "Low",
+            "synonyms": [
+              "zero",
+              "under one",
+              "less than one",
+              "0",
+              ".5"
+            ]
+          },
+          {
+            "value": "Fair",
+            "synonyms": [
+              "one",
+              "two",
+              "1.5",
+              "1",
+              "2"
+            ]
+          }
+        ],
+        "valueSelectionStrategy": "TOP_RESOLUTION"
+      },
+      {
+        "description": "Price to sale ratio",
+        "name": "Price_Sale",
+        "version": "1",
+        "enumerationValues": [
+          {
+            "value": "High",
+            "synonyms": [
+              "three",
+              "four",
+              "five"
+            ]
+          },
+          {
+            "value": "Low",
+            "synonyms": [
+              "zero"
+            ]
+          },
+          {
+            "value": "Fair",
+            "synonyms": [
+              "one",
+              "two"
+            ]
+          }
+        ],
+        "valueSelectionStrategy": "TOP_RESOLUTION"
+      },
+      {
+        "description": "Lowest Share Price Allowed",
+        "name": "sharePrice",
+        "version": "2",
+        "enumerationValues": [
+          {
+            "value": "high",
+            "synonyms": [
+              "five",
+              "5",
+              "6",
+              "six",
+              "over 5 dollars"
+            ]
+          },
+          {
+            "value": "low",
+            "synonyms": [
+              "one",
+              "1",
+              "2",
+              "two",
+              "three",
+              "3",
+              "four",
+              "4"
+            ]
+          }
+        ],
+        "valueSelectionStrategy": "TOP_RESOLUTION"
+      },
+      {
+        "description": "Position on Bollinger Bands",
+        "name": "BollingerBands",
+        "version": "1",
+        "enumerationValues": [
+          {
+            "value": "Below",
+            "synonyms": [
+              "low",
+              "under",
+              "breaking down"
+            ]
+          },
+          {
+            "value": "Between",
+            "synonyms": [
+              "within",
+              "middle",
+              "near the mean"
+            ]
+          },
+          {
+            "value": "Above",
+            "synonyms": [
+              "High",
+              "breakout"
+            ]
+          }
+        ],
+        "valueSelectionStrategy": "TOP_RESOLUTION"
+      },
+      {
+        "description": "Golden Cross or Death Cross",
+        "name": "EMA",
+        "version": "1",
+        "enumerationValues": [
+          {
+            "value": "Golden Cross "
+          },
+          {
+            "value": "Death Cross"
+          }
+        ],
+        "valueSelectionStrategy": "ORIGINAL_VALUE"
+      },
+      {
+        "description": "Price / Earnings (TTM)",
+        "name": "Price_per_Earnings",
+        "version": "1",
+        "enumerationValues": [
+          {
+            "value": "High",
+            "synonyms": [
+              "Above Average",
+              "large"
+            ]
+          },
+          {
+            "value": "Low",
+            "synonyms": [
+              "low",
+              "small"
+            ]
+          },
+          {
+            "value": "Not Meaningful",
+            "synonyms": [
+              "Irrelevant",
+              "None",
+              "Negative",
+              "NM"
+            ]
+          },
+          {
+            "value": "Average",
+            "synonyms": [
+              "Medium",
+              "mid-range",
+              "mid"
+            ]
+          }
+        ],
+        "valueSelectionStrategy": "TOP_RESOLUTION"
+      }
+    ],
+    "voiceId": "Matthew",
+    "childDirected": false,
+    "locale": "en-US",
+    "idleSessionTTLInSeconds": 300,
+    "clarificationPrompt": {
+      "messages": [
+        {
+          "contentType": "PlainText",
+          "content": "Sorry, can you please repeat that?"
+        }
+      ],
+      "maxAttempts": 5
+    },
+    "abortStatement": {
+      "messages": [
+        {
+          "contentType": "PlainText",
+          "content": "Sorry, I could not understand. Goodbye."
+        }
+      ]
+    },
+    "detectSentiment": false
+  }
+}
