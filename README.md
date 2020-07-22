@@ -62,7 +62,7 @@ This intent allows the user to trim the universe of US-listed stocks based on fu
     3. High (> 2)
     
 #### Slot_10:  Timeframe
-    -User can decide to select the default selection of 2000 days or choose a different horizon.
+* User can decide to select the default selection of 2000 days or choose a different horizon.
 
 #### Confirmation Prompt
 * If some number of stocks meets all of the above criteria, then the user is told:
