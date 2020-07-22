@@ -14,13 +14,13 @@ Our team has determined an AWS bot programmed with Amazon Lex and Lambda is best
 This intent allows the user to trim the universe of US-listed stocks based on fund restrictions.
 
 #### Slot_1:  First Name
-    -for personalized bot interactions
+    * for personalized bot interactions
 
 #### Slot_2: User Age
-    -to verify the user is of majority age (21)
+    * to verify the user is of majority age (21)
     
 #### Slot_3: Contact Info
-    -user must input 10-digit phone number
+    * user must input 10-digit phone number
 
 #### Slot_4:  Market Cap
 * Card Buttons
